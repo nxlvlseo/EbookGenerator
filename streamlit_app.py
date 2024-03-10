@@ -49,6 +49,14 @@ def main():
     else:
         st.write("No outline available to generate book.")
 
+    def generate_book_content(outline):
+    chapters_content = {}
+    for idx, chapter_title in enumerate(outline, start=1):
+        chapter_prompt = f"Write a detailed chapter about {chapter_title}, consisting of approximately 1000 words."
+        chapter_content = generate_text(chapter_prompt, max_tokens=2000)  # Adjust max_tokens as needed
+        chapters_content[f"Chapter {idx}: {chapter_title}"] = chapter_content
+    return chapters_content
+
        class PDF(FPDF):
             def chapter_title(self, title):
             self.set_font('Arial', 'B', 12)
@@ -60,13 +68,13 @@ def main():
                 self.multi_cell(0, 10, body)
                 self.ln()
 
-    def create_pdf(chapters):
-        pdf = PDF()
-        pdf.add_page()
-        for title, body in chapters.items():
-            pdf.chapter_title(title)
-            pdf.chapter_body(body)
-        return pdf.output(dest='S').encode('latin1')
+        def create_pdf(chapters):
+            pdf = PDF()
+            pdf.add_page()
+            for title, body in chapters.items():
+                pdf.chapter_title(title)
+                pdf.chapter_body(body)
+            return pdf.output(dest='S').encode('latin1')
  
 if __name__ == "__main__":
     main()
