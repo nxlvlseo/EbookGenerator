@@ -32,7 +32,7 @@ def main():
 
     if submit_button:
         prompt = f"Create a book outline for a {genre} book titled '{title}', aimed at {age}-year-olds, in {language}. The main character is {sex} with interests in {interests}."
-        outline = generate_text(prompt, max_tokens=500)
+        outline = generate_text(prompt, max_tokens=100)
         st.session_state['outline'] = outline.split('\n')
         st.write("Generated Outline:")
         for idx, item in enumerate(st.session_state['outline']):
