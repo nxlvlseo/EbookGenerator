@@ -74,8 +74,8 @@ def main():
         )
 
     if st.button("Generate Complete Book"):
-    chapters_content = generate_book_content(st.session_state['outline'])
-    create_and_download_pdf(chapters_content)
+        chapters_content = generate_book_content(st.session_state['outline'])
+        create_and_download_pdf(chapters_content)
 
 
 if __name__ == "__main__":
