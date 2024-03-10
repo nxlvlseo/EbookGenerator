@@ -38,16 +38,7 @@ def main():
         for idx, item in enumerate(st.session_state['outline']):
             st.text(f"{idx+1}. {item}")
 
-        # Buttons for outline interaction
-        if st.button("Regenerate Outline"):
-            st.session_state['outline'] = generate_text(prompt, max_tokens=500).split('\n')
-        
-        updated_outline = []
-        for idx, item in enumerate(st.session_state['outline']):
-            new_item = st.text_input(f"Item {idx+1}", value=item)
-            updated_outline.append(new_item)
-        st.session_state['outline'] = updated_outline
-
+      
         if st.button("Finalize Outline and Generate Book"):
             book_prompt = "Based on the following outline, generate a book:\n\n" + "\n".join(st.session_state['outline'])
             book = generate_text(book_prompt, max_tokens=2048)
