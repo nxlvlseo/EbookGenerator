@@ -57,24 +57,21 @@ def main():
         chapters_content[f"Chapter {idx}: {chapter_title}"] = chapter_content
     return chapters_content
 
-       class PDF(FPDF):
-            def chapter_title(self, title):
-            self.set_font('Arial', 'B', 12)
-            self.cell(0, 10, title, 0, 1, 'L')
-            self.ln(10)
-
-            def chapter_body(self, body):
-                self.set_font('Arial', '', 12)
-                self.multi_cell(0, 10, body)
-                self.ln()
-
-        def create_pdf(chapters):
-            pdf = PDF()
-            pdf.add_page()
-            for title, body in chapters.items():
-                pdf.chapter_title(title)
-                pdf.chapter_body(body)
-            return pdf.output(dest='S').encode('latin1')
+    def create_and_download_pdf(chapters_content):
+    pdf = PDF()
+    pdf.add_page()
+    for chapter_title, chapter_content in chapters_content.items():
+        pdf.chapter_title(chapter_title)
+        pdf.chapter_body(chapter_content)
+    
+    pdf_file = pdf.output(dest='S').encode('latin1')
+    
+    st.download_button(
+        label="Download eBook as PDF",
+        data=pdf_file,
+        file_name="Generated_Book.pdf",
+        mime="application/pdf"
+    )
  
 if __name__ == "__main__":
     main()
