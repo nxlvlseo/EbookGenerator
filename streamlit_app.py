@@ -1,11 +1,12 @@
 import streamlit as st
 import openai
 import os
+from fpdf import FPDF
 
 # OpenAI API key setup
 openai.api_key = st.secrets["secrets"]["OPENAI_API_KEY"]
 
-def generate_text(prompt, max_tokens=500):
+def generate_text(prompt, max_tokens=1000):
     try:
         response = openai.ChatCompletion.create(
           model="gpt-4",  # Adjust according to the available models
@@ -40,13 +41,32 @@ def main():
 
       
    # Place this part inside your main function to check if the button is being clicked
-    if st.button("Finalize Outline and Generate Book"):
+    if st.button("Finalize Outline and Generate Chapter Excerpt"):
         if 'outline' in st.session_state:
             book_prompt = "Based on the following outline, generate a book:\n\n" + "\n".join(st.session_state['outline'])
             book = generate_text(book_prompt, max_tokens=2048)
             st.write(book)
     else:
         st.write("No outline available to generate book.")
+
+       class PDF(FPDF):
+            def chapter_title(self, title):
+            self.set_font('Arial', 'B', 12)
+            self.cell(0, 10, title, 0, 1, 'L')
+            self.ln(10)
+
+            def chapter_body(self, body):
+                self.set_font('Arial', '', 12)
+                self.multi_cell(0, 10, body)
+                self.ln()
+
+    def create_pdf(chapters):
+        pdf = PDF()
+        pdf.add_page()
+        for title, body in chapters.items():
+            pdf.chapter_title(title)
+            pdf.chapter_body(body)
+        return pdf.output(dest='S').encode('latin1')
  
 if __name__ == "__main__":
     main()
