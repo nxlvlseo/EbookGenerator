@@ -3,7 +3,7 @@ import openai
 import os
 
 # OpenAI API key setup
-openai.api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = st.secrets["secrets"]["OPENAI_API_KEY"]
 
 def generate_text(prompt):
     try:
