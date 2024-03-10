@@ -39,11 +39,15 @@ def main():
             st.text(f"{idx+1}. {item}")
 
       
-        if st.button("Finalize Outline and Generate Book"):
+   # Place this part inside your main function to check if the button is being clicked
+    if st.button("Finalize Outline and Generate Book"):
+        if 'outline' in st.session_state:
             book_prompt = "Based on the following outline, generate a book:\n\n" + "\n".join(st.session_state['outline'])
             book = generate_text(book_prompt, max_tokens=2048)
             st.write(book)
-
+    else:
+        st.write("No outline available to generate book.")
+ 
 if __name__ == "__main__":
     main()
     
