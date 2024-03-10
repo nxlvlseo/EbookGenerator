@@ -23,7 +23,7 @@ def main():
 
     with st.form("book_input_form"):
         title = st.text_input("Title")
-        genre = st.text_input("Genre", ['Fiction', 'None Fiction'])
+        genre = st.selectbox("Genre", ['Fiction', 'None Fiction'])
         age = st.number_input("Target Age", min_value=18, value=18)
         language = st.text_input("Language", value="English")
         sex = st.selectbox("Sex", ['Male', 'Female', 'Other'])
