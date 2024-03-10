@@ -5,7 +5,7 @@ import os
 # OpenAI API key setup
 openai.api_key = st.secrets["secrets"]["OPENAI_API_KEY"]
 
-def generate_text(prompt):
+def generate_text(prompt, max_tokens=500):
     try:
         response = openai.ChatCompletion.create(
           model="gpt-4",  # Adjust according to the available models
@@ -32,7 +32,7 @@ def main():
 
     if submit_button:
         prompt = f"Create a book outline for a {genre} book titled '{title}', aimed at {age}-year-olds, in {language}. The main character is {sex} with interests in {interests}."
-        outline = generate_text(prompt, max_tokens=100)
+        outline = generate_text(prompt)
         st.session_state['outline'] = outline.split('\n')
         st.write("Generated Outline:")
         for idx, item in enumerate(st.session_state['outline']):
