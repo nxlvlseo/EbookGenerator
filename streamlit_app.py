@@ -50,28 +50,28 @@ def main():
         st.write("No outline available to generate book.")
 
     def generate_book_content(outline):
-    chapters_content = {}
-    for idx, chapter_title in enumerate(outline, start=1):
-        chapter_prompt = f"Write a detailed chapter about {chapter_title}, consisting of approximately 1000 words."
-        chapter_content = generate_text(chapter_prompt, max_tokens=2000)  # Adjust max_tokens as needed
-        chapters_content[f"Chapter {idx}: {chapter_title}"] = chapter_content
-    return chapters_content
+        chapters_content = {}
+        for idx, chapter_title in enumerate(outline, start=1):
+            chapter_prompt = f"Write a detailed chapter about {chapter_title}, consisting of approximately 1000 words."
+            chapter_content = generate_text(chapter_prompt, max_tokens=2000)  # Adjust max_tokens as needed
+            chapters_content[f"Chapter {idx}: {chapter_title}"] = chapter_content
+        return chapters_content
 
     def create_and_download_pdf(chapters_content):
-    pdf = PDF()
-    pdf.add_page()
-    for chapter_title, chapter_content in chapters_content.items():
-        pdf.chapter_title(chapter_title)
-        pdf.chapter_body(chapter_content)
-    
-    pdf_file = pdf.output(dest='S').encode('latin1')
-    
-    st.download_button(
-        label="Download eBook as PDF",
-        data=pdf_file,
-        file_name="Generated_Book.pdf",
-        mime="application/pdf"
-    )
+        pdf = PDF()
+        pdf.add_page()
+        for chapter_title, chapter_content in chapters_content.items():
+            pdf.chapter_title(chapter_title)
+            pdf.chapter_body(chapter_content)
+        
+        pdf_file = pdf.output(dest='S').encode('latin1')
+        
+        st.download_button(
+            label="Download eBook as PDF",
+            data=pdf_file,
+            file_name="Generated_Book.pdf",
+            mime="application/pdf"
+        )
 
     if st.button("Generate Complete Book"):
     chapters_content = generate_book_content(st.session_state['outline'])
