@@ -17,7 +17,7 @@ def generate_text(prompt):
         return ""
 
 
-def app():
+def main():
     """Main app function."""
     st.title("E-Book Creator")
 
@@ -53,6 +53,6 @@ def app():
             book = generate_text(book_prompt, max_tokens=2048)
             st.write(book)
 
-if __name__ == "__app__":
-    app()
+if __name__ == "__main__":
+    main()
     
