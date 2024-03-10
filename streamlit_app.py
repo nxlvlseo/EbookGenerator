@@ -1,32 +1,58 @@
 import streamlit as st
 import openai
 from streamlit_option_menu import option_menu  # You may need to add this to your requirements.txt
+import os
 
 # OpenAI API key setup
 openai.api_key = st.secrets["secrets"]["OPENAI_API_KEY"]
 
-def main():
+def generate_script(prompt):
+    try:
+        response = openai.ChatCompletion.create(
+          model="gpt-4",  # Adjust according to the available models
+          messages=[{"role": "system", "content": prompt}]
+        )
+        return response['choices'][0]['message']['content']
+    except Exception as e:
+        st.error(f"An error occurred while generating the script: {e}")
+        return ""
+
+
+def app():
+    """Main app function."""
     st.title("E-Book Creator")
 
     with st.form("book_input_form"):
         title = st.text_input("Title")
-        genre = st.selectbox("Genre", ['Fantasy', 'Sci-Fi', 'Mystery', 'Romance', 'Horror', 'Non-fiction'])
-        age = st.number_input("Age", min_value=0)
-        language = st.selectbox("Language", ['English', 'Spanish', 'French', 'German', 'Chinese'])
+        genre = st.text_input("Genre")
+        age = st.number_input("Target Age", min_value=0, value=18)
+        language = st.text_input("Language", value="English")
         sex = st.selectbox("Sex", ['Male', 'Female', 'Other'])
-        interests = st.text_input("Interests")
-        submitted = st.form_submit_button("Generate Outline")
+        interests = st.text_area("Interests")
+        submit_button = st.form_submit_button("Generate Outline")
 
-    if submitted:
-        # Placeholder for OpenAI call to generate outline
-        st.session_state['outline'] = generate_outline(title, genre, age, language, sex, interests)
-        st.write(st.session_state['outline'])
+    if submit_button:
+        prompt = f"Create a book outline for a {genre} book titled '{title}', aimed at {age}-year-olds, in {language}. The main character is {sex} with interests in {interests}."
+        outline = generate_script(prompt, max_tokens=500)
+        st.session_state['outline'] = outline.split('\n')
+        st.write("Generated Outline:")
+        for idx, item in enumerate(st.session_state['outline']):
+            st.text(f"{idx+1}. {item}")
 
-# Define the function to generate the outline
-def generate_outline(title, genre, age, language, sex, interests):
-    # Placeholder for OpenAI API call
-    # Implement the OpenAI call based on the provided inputs and return the outline
-    return "Generated outline based on the inputs"
+        # Buttons for outline interaction
+        if st.button("Regenerate Outline"):
+            st.session_state['outline'] = generate_script(prompt, max_tokens=500).split('\n')
+        
+        updated_outline = []
+        for idx, item in enumerate(st.session_state['outline']):
+            new_item = st.text_input(f"Item {idx+1}", value=item)
+            updated_outline.append(new_item)
+        st.session_state['outline'] = updated_outline
+
+        if st.button("Finalize Outline and Generate Book"):
+            book_prompt = "Based on the following outline, generate a book:\n\n" + "\n".join(st.session_state['outline'])
+            book = generate_script(book_prompt, max_tokens=2048)
+            st.write(book)
 
 if __name__ == "__main__":
-    main()
+    app()
