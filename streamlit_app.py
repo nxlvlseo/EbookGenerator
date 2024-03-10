@@ -23,11 +23,11 @@ def main():
 
     with st.form("book_input_form"):
         title = st.text_input("Title")
-        genre = st.text_input("Genre")
-        age = st.number_input("Target Age", min_value=0, value=18)
+        genre = st.text_input("Genre", ['Fiction', 'None Fiction'])
+        age = st.number_input("Target Age", min_value=18, value=18)
         language = st.text_input("Language", value="English")
         sex = st.selectbox("Sex", ['Male', 'Female', 'Other'])
-        interests = st.text_area("Interests")
+        interests = st.text_area("Interests". value='Write a short description of the use case/purpose for your eBook.')
         submit_button = st.form_submit_button("Generate Outline")
 
     if submit_button:
