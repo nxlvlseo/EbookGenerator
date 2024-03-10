@@ -53,6 +53,6 @@ def app():
             book = generate_text(book_prompt, max_tokens=2048)
             st.write(book)
 
-if __name__ == "__main__":
+if __name__ == "__app__":
     app()
     
