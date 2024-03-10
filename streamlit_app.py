@@ -3,7 +3,7 @@ import openai
 from streamlit_option_menu import option_menu  # You may need to add this to your requirements.txt
 
 # OpenAI API key setup
-openai.api_key = 'your_openai_api_key_here'
+openai.api_key = st.secrets["secrets"]["OPENAI_API_KEY"]
 
 def main():
     st.title("E-Book Creator")
