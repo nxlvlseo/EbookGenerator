@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu  # You may need to add this to you
 import os
 
 # OpenAI API key setup
-openai.api_key = st.secrets["secrets"]["OPENAI_API_KEY"]
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def generate_text(prompt):
     try:
