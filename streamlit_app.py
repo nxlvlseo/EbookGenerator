@@ -1,10 +1,9 @@
 import streamlit as st
 import openai
-from streamlit_option_menu import option_menu  # You may need to add this to your requirements.txt
 import os
 
 # OpenAI API key setup
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 def generate_text(prompt):
     try:
